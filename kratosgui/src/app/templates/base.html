@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kratos Gui</title>
+    <link rel="stylesheet" href="{{url_for('static',filename='style.css')}}">
+    {% block head %}
+    {% endblock %}
+</head>
+<body>
+  <header>
+      <h1 ><img src="{{ url_for('static',filename='kratoslogo.png') }}"</h1>
+  </header>
+  <div class="container">
+    <nav class="sidebar">
+      <ul>
+          <li><a href="/ld">LD Spectro Graph</a></li>
+        <li><a href="/arm">Arm Visualiser</a></li>
+        <li><a href="/ldgas">Settings</a></li>
+        <li><a href="#">Logout</a></li>
+      </ul>
+    </nav>
+    <main class="main-content" id="main-content">
+        {% block main %}{% endblock %}
+    </main>
+
+  </div>
+
+    {% block script %}{% endblock %}
+</body>
+</html>
+

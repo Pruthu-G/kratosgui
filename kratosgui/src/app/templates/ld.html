@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block head %}
+
+{% endblock %}
+{% block main%}
+  <svg width="1200" height="750"></svg>
+{%endblock%}
+
+{% block script %}
+<script src="{{ url_for('static',filename='js/d3.v7.min.js') }}"></script>
+<script type="module" src="{{ url_for('static',filename='js/ld_graph.js') }}"></script>
+{% endblock %}
