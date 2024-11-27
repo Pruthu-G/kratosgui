@@ -47,7 +47,8 @@ if __name__=="__main__":
 import rospy
 import threading
 import asyncio
-from std_msgs.msg import String, Int32MultiArray
+from std_msgs.msg import String, Float64MultiArray
+from geometry_msgs.msg import Twist
 from websockets.asyncio.server import serve
 from geometry_msgs.msg import Twist
 import json
@@ -87,7 +88,7 @@ class websocket_module:
         rospy.on_shutdown(self.on_shutdown)
 
 if __name__=="__main__":
-    obj=websocket_module('/cmd_vel',Twist,8765)
+    obj=websocket_module('/spectral_data',Float64MultiArray,8766)
     obj.loop_thread.start()
     rospy.spin()
     #obj=websocket_module('random',Int32MultiArray)

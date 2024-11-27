@@ -17,17 +17,19 @@
       <ul>
           <li><a href="/ld">LD Spectro Graph</a></li>
         <li><a href="/arm">Arm Visualiser</a></li>
-        <li><a href="/ldgas">Settings</a></li>
-        <li><a href="#">Logout</a></li>
+        <li><a href="/video">Video</a></li>
+        <li><a href="/exit">Exit</a></li>
       </ul>
     </nav>
     <main class="main-content" id="main-content">
         {% block main %}{% endblock %}
     </main>
-
+      <div class="top-right-box"></div>
   </div>
 
-    {% block script %}{% endblock %}
+    {% block script %}
+<script type="module" src="{{url_for('static',filename='js/pingstatus.js')}}"></script>
+    {% endblock %}
 </body>
 </html>
 

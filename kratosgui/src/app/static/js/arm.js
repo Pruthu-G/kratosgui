@@ -1,5 +1,5 @@
 import * as THREE from './three.module.min.js';
-
+import {OrbitControls} from './OrbitControls.js';
 const container= document.getElementById('three-container');
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera( 75, container.clientWidth/container.clientHeight, 0.1, 1000 );
@@ -14,14 +14,16 @@ const cube = new THREE.Mesh( geometry, material );
 scene.add( cube );
 
 camera.position.z = 5;*/
+const controls=new OrbitControls(camera,renderer.domElement);
+controls.target.set(2,3,2);
 const orange_mesh =  new THREE.MeshStandardMaterial( {
-        color: 0xE55C08,
+        color: 0x2F2F2F,
 metalness: 1,
         roughness: 0.4
     });
   
     const grey_mesh =  new THREE.MeshStandardMaterial( {
-        color: 0x756C6A,
+        color: 0xFFD700,
         metalness: 1,
         roughness: 0.4
     });
@@ -35,14 +37,14 @@ const grid = new THREE.GridHelper( 12, 12, 0x888888, 0x444444 );
   // Light
   {
     const color = 0xFFFFFF;
-    const intensity = 6;
+    const intensity = 3;
     const light = new THREE.DirectionalLight(color, intensity);
     light.position.set(-1, 2, 4);
     scene.add(light);
   }
   {
     const color = 0xFFFFFF;
-    const intensity = 6;
+    const intensity = 3;
     const light = new THREE.DirectionalLight(color, intensity);
     light.position.set(1, -2, -4);
     scene.add(light);
@@ -311,4 +313,79 @@ const grid = new THREE.GridHelper( 12, 12, 0x888888, 0x444444 );
 scene.add(arm_group);
 
 const robotHand = arm_group.children[3].children[0].children[2].children[0].children[4];
-renderer.render(scene,camera);
+const lowerArm = arm_group.children[3];
+const upperArm = arm_group.children[3].children[0].children[2];
+
+/*function animate(x,y)
+{
+  requestAnimationFrame(animate)
+  //robotHand.rotation.x+=0.1;
+  lowerArm.rotation.y+=0.0000001*Math.abs(x);
+  upperArm.rotation.y+=0.0000001*Math.abs(y);
+  renderer.render(scene,camera);
+}
+
+//animate();
+//renderer.render(scene,camera);
+
+const socket=new WebSocket('ws://localhost:8765');
+socket.onopen=()=>{
+  animate(1,1);
+};
+socket.onmessage=(event)=>{
+  const data=JSON.parse(JSON.parse(event.data));
+  const x=data.linear.x;
+  const y=data.linear.y;
+  console.log(x);
+  animate(x.y);
+};*/
+/*const socket=new WebSocket('ws://localhost:8765');
+function animate(){
+  socket.onopen=()=>{
+    console.log('connection established');
+  };
+  socket.onmessage=(event)=>{
+    const data=JSON.parse(JSON.parse(event.data));
+    const x=data.linear.x;
+    const y=data.linear.y;
+    lowerArm.rotation.x+=0.001*x;
+    upperArm.rotation.y+=0.001*y;
+    console.log(x);
+  };
+  renderer.render(scene,camera);
+}
+
+animate();*/
+
+const socket = new WebSocket('ws://localhost:8765');
+
+let x = 0, y = 0; // Variables to store WebSocket data
+
+// Initialize WebSocket
+socket.onopen = () => {
+  console.log('Connection established');
+};
+
+socket.onmessage = (event) => {
+  const data = JSON.parse(JSON.parse(event.data));
+  x = data.linear.x;
+  y = data.angular.z;
+  console.log(x, y);
+};
+
+// Animation loop
+function animate() {
+  requestAnimationFrame(animate);
+
+  // Update rotations based on WebSocket data
+  lowerArm.rotation.z+=0.001*x;
+  //lowerArm.rotation.y += 0.001 * x;
+  upperArm.rotation.z += 0.001 * y;
+
+  // Render the scene
+  controls.update();
+  renderer.render(scene, camera);
+}
+
+// Start the animation loop
+animate();
